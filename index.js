@@ -1,4 +1,3 @@
-const { createFilter } = require('rollup-pluginutils');
 const fs = require('fs');
 const MagicString = require('magic-string');
 const path = require('path');
@@ -6,14 +5,12 @@ const path = require('path');
 module.exports = (opts = {}) => {
   const include = opts.include || '**/*.less';
   const { exclude } = opts;
-  const filter = createFilter(include, exclude);
   const filtering = opts.filtering !== false;
   const paths = opts.paths || ['./node_modules'];
   const sourcemap = opts.sourcemap !== false;
   return {
     name: 'less-tilde-importer',
     transform(code, id) {
-      if (filtering && !filter(id)) return null;
       const magicString = new MagicString(code);
       const importRegex = /(@import[^'"]*['"]+)(~[^'"]+)(['"]+\s*;)/g;
       const hasExtensionRegex = /\.\w+$/;
